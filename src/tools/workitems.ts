@@ -7,7 +7,7 @@ import { WebApi } from "azure-devops-node-api";
 import { WorkItemExpand } from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces.js";
 import { QueryExpand } from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces.js";
 import { z } from "zod";
-import { batchApiVersion, markdownCommentsApiVersion, getEnumKeys, safeEnumConvert } from "../utils.js";
+import { batchApiVersion, getEnumKeys, markdownCommentsApiVersion, safeEnumConvert } from "../utils.js";
 
 const WORKITEM_TOOLS = {
   my_work_items: "wit_my_work_items",
@@ -130,7 +130,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
     async ({ project, ids }) => {
       const connection = await connectionProvider();
       const workItemApi = await connection.getWorkItemTrackingApi();
-      const fields = ["System.Id", "System.WorkItemType", "System.Title", "System.State", "System.Parent", "System.Tags"];
+      const fields = ["System.Id", "System.WorkItemType", "System.Title", "System.State", "System.Parent", "System.Tags", "System.AssignedTo"];
       const workitems = await workItemApi.getWorkItemsBatch({ ids, fields }, project);
 
       return {
@@ -758,4 +758,5 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
   );
 }
 
-export { WORKITEM_TOOLS, configureWorkItemTools };
+export { configureWorkItemTools, WORKITEM_TOOLS };
+
